@@ -1,31 +1,40 @@
 import 'dart:convert';
-import 'dart:js_interop';
 
 import 'package:countries_app/data/models/country.dart';
 import 'package:flutter/services.dart';
 
-import '../../domain/repositories/CountryRepository.dart';
+import '../../domain/repositories/country_repository.dart';
 
 class CountryRepositoryImpl implements CountryRepository {
   @override
   Future<List<Country>> getAllCountries() async {
-    final  response = await rootBundle.loadString("assets/data.json");
-
-    print('YOU Are here!1');
-
+    final response = await rootBundle.loadString("assets/data.json");
     final data = await json.decode(response);
-    // final jsonList = await data['item'].map((e) => Country.fromJson(e)).toList();
-    // print('JsonList: ${jsonList}');
-    final test = Country.fromList(data['items']);
-    print (test.length);
-    return test;
-    //return await  data['items'].map((e) => Country.fromJson(e)).toList();
+
+    return Country.fromList(data['items']);
   }
 
   @override
-  Future<List<Country>> getCountriesByRegion(String region) {
-    // TODO: implement getCountriesByRegion
-    throw UnimplementedError();
+  Future<List<Country>> searchCountries({
+    String? region,
+    String? searchQuery,
+  }) async {
+    final response = await rootBundle.loadString("assets/data.json");
+    final data = await json.decode(response);
+    final countriesList = Country.fromList(data['items']);
+
+    return countriesList
+        .where((country) =>
+            country.name
+                .toString()
+                .toLowerCase()
+                .contains(searchQuery?.toLowerCase() ?? '') ||
+            country.capital!
+                .toString()
+                .toLowerCase()
+                .contains(searchQuery?.toLowerCase() ?? ''))
+        .where((country) => country.region.contains(region ?? ''))
+        .toList();
   }
 
   @override

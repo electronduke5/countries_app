@@ -36,11 +36,13 @@ class CountryCard extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: Row(
                       children: [
-                        Text(
-                          country.name,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                        Flexible(
+                          child: Text(
+                            country.name,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ],
@@ -52,7 +54,7 @@ class CountryCard extends StatelessWidget {
                         'Population: ',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      Text(country.population.toString()),
+                      Flexible(child: Text(country.population.toString())),
                     ],
                   ),
                   Row(
@@ -70,7 +72,7 @@ class CountryCard extends StatelessWidget {
                         'Capital: ',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      Text(country.capital.toString()),
+                      Flexible(child: Text(country.capital.toString())),
                     ],
                   ),
                 ],

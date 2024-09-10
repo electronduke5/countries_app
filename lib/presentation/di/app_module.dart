@@ -1,5 +1,5 @@
 import 'package:countries_app/data/repositories/country_repository_impl.dart';
-import 'package:countries_app/domain/repositories/CountryRepository.dart';
+import 'package:countries_app/domain/repositories/country_repository.dart';
 import 'package:get_it/get_it.dart';
 
 class AppModule {
