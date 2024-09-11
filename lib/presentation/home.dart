@@ -76,9 +76,9 @@ class HomePage extends StatelessWidget {
                                 'Oceania'
                               ]
                                   .map<DropdownMenuItem<String>>(
-                                    (String _value) => DropdownMenuItem<String>(
-                                      child: Text(_value),
-                                      value: _value,
+                                    (String value) => DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
                                     ),
                                   )
                                   .toList(),

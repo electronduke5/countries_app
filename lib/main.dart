@@ -2,6 +2,7 @@ import 'package:countries_app/presentation/cubits/theme_cubit.dart';
 import 'package:countries_app/presentation/cubits/country_cubit/country_cubit.dart';
 import 'package:countries_app/presentation/di/app_module.dart';
 import 'package:countries_app/presentation/home.dart';
+import 'package:countries_app/presentation/info_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -38,8 +39,8 @@ class MyApp extends StatelessWidget {
                   child: HomePage(),
                 ),
             '/info_page': (context) => BlocProvider<CountryCubit>(
-                  create: (context) => CountryCubit()..getAllCountries(),
-                  child:  HomePage(),
+                  create: (context) => CountryCubit(),
+                  child:  InfoPage(),
                 ),
           },
         ),
