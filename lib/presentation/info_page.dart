@@ -1,23 +1,33 @@
 import 'package:countries_app/data/models/country.dart';
+import 'package:countries_app/presentation/cubits/country_cubit/country_cubit.dart';
 import 'package:countries_app/presentation/widgets/naming_text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 class InfoPage extends StatelessWidget {
   InfoPage({super.key});
 
   Country? country = Country(
-      name: 'Angola',
-      flagSVG: 'https://flagcdn.com/ao.svg',
-      population: '32,866,268',
-      region: 'Africa',
-      capital: 'Luanda');
+    name: 'Angola',
+    flagSVG: 'https://flagcdn.com/ao.svg',
+    population: '32,866,268',
+    region: 'Africa',
+    capital: 'Luanda',
+    alpha2Code: 'AO',
+    alpha3Code: 'AGO',
+    area: '1,246,700',
+    topLevelDomain: ['.ao'],
+    borders: ["COG", "COD", "ZMB", "NAM"],
+    nativeName: 'Angola',
+    subregion: 'Middle Africa',
+  );
 
   //TODO: Заменить ! на null-safety
 
   @override
   Widget build(BuildContext context) {
-    //country = ModalRoute.of(context)?.settings.arguments as Country?;
+    country = ModalRoute.of(context)?.settings.arguments as Country?;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Where in the World?'),
@@ -70,21 +80,21 @@ class InfoPage extends StatelessWidget {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const NamingTextWidget(
+                                  NamingTextWidget(
                                     name: 'Native Name',
-                                    text: 'country!.nativeName',
+                                    text: country!.nativeName,
                                   ),
                                   NamingTextWidget(
                                     name: 'Population',
-                                    text: country!.population.toString(),
+                                    text: country!.population!,
                                   ),
                                   NamingTextWidget(
                                     name: 'Region',
                                     text: country!.region,
                                   ),
-                                  const NamingTextWidget(
+                                  NamingTextWidget(
                                     name: 'Sub Region',
-                                    text: 'country!.subRegion',
+                                    text: country!.subregion,
                                   ),
                                   NamingTextWidget(
                                     name: 'Capital',
@@ -93,20 +103,20 @@ class InfoPage extends StatelessWidget {
                                 ],
                               ),
                               const Spacer(flex: 1),
-                              const Column(
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   NamingTextWidget(
                                     name: 'Top Level Domain',
-                                    text: 'country!.topLevelDomain',
+                                    text: country!.topLevelDomain.first,
                                   ),
                                   NamingTextWidget(
-                                    name: 'Currencies',
-                                    text: 'country!.currencies',
+                                    name: 'Code',
+                                    text: country!.alpha3Code,
                                   ),
                                   NamingTextWidget(
-                                    name: 'Language',
-                                    text: 'country!.languages',
+                                    name: 'Area',
+                                    text: country!.area,
                                   ),
                                 ],
                               ),
@@ -115,7 +125,7 @@ class InfoPage extends StatelessWidget {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 20.0),
-                            child: Row(
+                            child: Wrap(
                               children: [
                                 const Text(
                                   'Border Countries:',
@@ -124,15 +134,30 @@ class InfoPage extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ElevatedButton(
-                                      onPressed: () {},
-                                      child: Text('Country Name1')),
-                                ),
-                                ElevatedButton(
-                                    onPressed: () {},
-                                    child: Text('Country Name2')),
+                                () {
+                                  List<ElevatedButton> buttons = [];
+                                  if (country!.borders != null) {
+                                    for (final border in country!.borders!) {
+                                      buttons = buttons
+                                        ..add(ElevatedButton(
+                                            onPressed: () async {
+                                              final countryBorder =
+                                                  await context
+                                                      .read<CountryCubit>()
+                                                      .getCountryByAlpha3Code(
+                                                          border);
+                                              Navigator.of(context)
+                                                  .pushReplacementNamed(
+                                                      '/info_page',
+                                                      arguments: countryBorder);
+                                            },
+                                            child: Text(border)));
+                                    }
+                                  }
+                                  return Wrap(
+                                    children: buttons,
+                                  );
+                                }(),
                               ],
                             ),
                           ),

@@ -38,8 +38,10 @@ class CountryRepositoryImpl implements CountryRepository {
   }
 
   @override
-  Future<Country> getCountryByCode(String code) {
-    // TODO: implement getCountryByCode
-    throw UnimplementedError();
+  Future<Country> getCountryByCode(String code) async {
+    final response = await rootBundle.loadString("assets/data.json");
+    final data = await json.decode(response);
+    final countriesList = Country.fromList(data['items']);
+    return countriesList.firstWhere((country) => country.alpha3Code == code);
   }
 }

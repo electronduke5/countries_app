@@ -67,4 +67,19 @@ class CountryCubit extends Cubit<CountryState> {
       return null;
     }
   }
+
+  Future<Country?> getCountryByAlpha3Code(String alpha3Code) async {
+    emit(state.copyWith(countryStatus: const LoadingStatus()));
+    try {
+      final country = await _repository.getCountryByCode(alpha3Code);
+      emit(state.copyWith(
+          countryStatus: LoadedStatus<Country>(country)));
+      return country;
+    } catch (e) {
+      emit(state.copyWith(
+          countryStatus:
+          FailedStatus(state.countriesStatus.message ?? e.toString())));
+      return null;
+    }
+  }
 }

@@ -15,8 +15,7 @@ class CountryCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
       child: InkWell(
         onTap: () {
-          Navigator.of(context)
-              .pushReplacementNamed('/info_page', arguments: country);
+          Navigator.of(context).pushNamed('/info_page', arguments: country);
         },
         child: Card(
           elevation: 0,
